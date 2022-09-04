@@ -5,20 +5,19 @@ import { HeaderClientsForm } from "./maintenanceClientsForm/HeaderClientsForm";
 import { MaintenanceClientsForm } from "./maintenanceClientsForm/MaintenanceClientsForm";
 
 export const MaintenanceClient = () => {
-  return (
-    <PersistentDrawerLeft>
-      <Card
-        display="flex"
-        sx={{
-          padding: "3rem",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
-      >
-        <HeaderClientsForm />
-        <Divider />
-        <MaintenanceClientsForm />
-      </Card>
-    </PersistentDrawerLeft>
-  );
+	return (
+		<PersistentDrawerLeft>
+			<Card
+				display="flex"
+				sx={{
+					padding: "3rem",
+					justifyContent: "center",
+				}}
+			>
+				<HeaderClientsForm />
+				<Divider />
+				<MaintenanceClientsForm />
+			</Card>
+		</PersistentDrawerLeft>
+	);
 };

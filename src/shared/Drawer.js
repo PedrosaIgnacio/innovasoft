@@ -158,8 +158,8 @@ export const PersistentDrawerLeft = ({ children }) => {
 					variant="h4"
 					textAlign="center"
 					sx={{ fontWeight: "light" }}
-					// mt={4}
-					// mb={4}
+					mt={4}
+					mb={4}
 				>
 					MENU
 				</Typography>

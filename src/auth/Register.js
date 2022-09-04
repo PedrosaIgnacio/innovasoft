@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
-import * as yup from "yup";
 import { Box, TextField, Button, Link, Typography, Grid } from "@mui/material";
 import { useRegister } from "./hooks/useRegister";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "./context/AuthContext";
+import * as yup from "yup";
+import YupPassword from "yup-password";
+YupPassword(yup);
+
 export const Register = () => {
 	const { register } = useRegister();
 	const { login } = useContext(AuthContext);
@@ -20,7 +23,13 @@ export const Register = () => {
 			.string()
 			.email("Debe ingresar un email valido")
 			.required("Email requerido"),
-		password: yup.string().required("Contraseña requerida"),
+		password: yup
+			.string()
+			.min(8, "La contrasena debe tener mas de 8 caracteres")
+			.max(20, "La contrasena debe tener menos de 20 caracteres")
+			.minUppercase(1, "La contrasena debe contener al menos una mayuscula")
+			.minNumbers(1, "La contrasena debe tener al menos un numero")
+			.required("Contraseña requerida"),
 	});
 
 	return (
@@ -64,7 +73,7 @@ export const Register = () => {
 									size="small"
 									variant="outlined"
 									label="Usuario"
-									sx={{ marginTop: "20px", width: "100%" }}
+									sx={{ marginTop: "20px" }}
 									helperText={<ErrorMessage name="username" />}
 								/>
 							</Grid>
@@ -77,7 +86,7 @@ export const Register = () => {
 									size="small"
 									variant="outlined"
 									label="Direccion de correo"
-									sx={{ marginTop: "20px", width: "100%" }}
+									sx={{ marginTop: "20px" }}
 									helperText={<ErrorMessage name="email" />}
 								/>
 							</Grid>
@@ -91,23 +100,22 @@ export const Register = () => {
 									size="small"
 									variant="outlined"
 									label="Contraseña"
-									sx={{ marginTop: "20px", width: "100%" }}
+									sx={{ marginTop: "20px" }}
 									helperText={<ErrorMessage name="password" />}
 								/>
 							</Grid>
 						</Grid>
-						<Grid marginTop={3}>
+						<Grid mt={3}>
 							<Button
 								type="submit"
 								variant="contained"
-								width="100%"
-								sx={{ bgcolor: "#2196F3", width: "100%" }}
-								// onClick={() => register(username, email, password)}
+								fullWidth
+								sx={{ bgcolor: "#2196F3" }}
 							>
 								Registrarme
 							</Button>
 						</Grid>
-						<Box marginTop={2} textAlign="center">
+						<Box mt={2} textAlign="center">
 							<Typography>
 								<Link
 									href="/auth/login"
