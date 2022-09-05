@@ -19,22 +19,57 @@ export const createHttpServices = (token, userid) => {
       });
     },
     getClients: async (identity, name) => {
-      return await axios.post(
-        url + "Cliente/Listado",
-        {
-          identificacion: identity,
-          nombre: name,
-          usuarioId: userid,
+      const data = {
+        usuarioId: userid,
+      };
+      if (identity === "" && name !== "") {
+        data.nombre = name;
+      }
+      if (name === "" && identity !== "") {
+        data.identificacion = identity;
+      }
+      if (identity === "" && name === "") {
+        data.identificacion = "";
+        data.nombre = "";
+      }
+      return await axios.post(url + "Cliente/Listado", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
     },
     getInterests: async () => {
       return await axios.get(url + "Intereses/Listado", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    createClient: async (data) => {
+      const newClient = { ...data, usuarioId: userid };
+      return await axios.post(url + "Cliente/Crear", newClient, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    deleteClient: async (id) => {
+      return await axios.delete(url + `Cliente/Eliminar/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    getClientById: async (id) => {
+      return await axios.get(url + `Cliente/Obtener/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    updateClient: async (data) => {
+      const upClient = { ...data, usuarioId: userid };
+      return await axios.post(url + `Cliente/Actualizar`, upClient, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

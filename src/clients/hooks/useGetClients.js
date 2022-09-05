@@ -1,11 +1,19 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../auth/context/AuthContext";
-import { useAsync } from "./useAsync";
 
-export const useGetClients = (indentity, name) => {
+export const useGetClients = (identity, name) => {
   const { httpServices } = useContext(AuthContext);
-  const { data, loading } = useAsync(
-    async () => await httpServices.getClients(indentity, name)
-  );
-  return { data: data?.data ?? [], loading };
+
+  const [state, setState] = useState([]);
+
+  const getClients = async () => {
+    const { data } = await httpServices.getClients(identity, name);
+    setState(data);
+  };
+
+  useEffect(() => {
+    getClients();
+  }, [identity, name]);
+
+  return { state, refresh: getClients };
 };

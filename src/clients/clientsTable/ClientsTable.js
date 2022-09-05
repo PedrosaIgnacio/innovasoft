@@ -1,6 +1,5 @@
 import React from "react";
 import { useGetClients } from "../hooks/useGetClients";
-import { BeatLoader } from "react-spinners";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,18 +9,13 @@ import TableRow from "@mui/material/TableRow";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDeleteClient } from "../hooks/useDeleteClient";
+import { useNavigate } from "react-router-dom";
 
-const override = {
-  display: "block",
-  margin: "0 auto",
-};
-
-export const ClientsTable = () => {
-  const { data, loading } = useGetClients();
-
-  if (loading) {
-    return <BeatLoader cssOverride={override} />;
-  }
+export const ClientsTable = ({ identity, name }) => {
+  const { state, refresh } = useGetClients(identity, name);
+  const { deleteClient } = useDeleteClient();
+  const navigate = useNavigate();
   return (
     <TableContainer sx={{ margin: "1rem 0rem" }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -35,18 +29,27 @@ export const ClientsTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map((row) => (
+          {state?.map((row, ind) => (
             <TableRow
-              key={row.name}
+              key={ind}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.indetificacion}
-              </TableCell>
-              <TableCell align="right">{row.nombre + row.apellidos}</TableCell>
+              <TableCell>{row.identificacion}</TableCell>
+              <TableCell>{row.nombre + " " + row.apellidos}</TableCell>
               <TableCell align="right">
-                <IconButton>
+                <IconButton
+                  onClick={() =>
+                    navigate(`/maintenanceclients/${row.id}`, { replace: true })
+                  }
+                >
                   <EditIcon />
+                </IconButton>
+                <IconButton
+                  onClick={async () => {
+                    await deleteClient(row.id);
+                    await refresh();
+                  }}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>

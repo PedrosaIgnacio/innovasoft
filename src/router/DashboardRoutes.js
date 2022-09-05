@@ -11,6 +11,7 @@ export const DashboardRoutes = () => {
         <Route path="home" element={<Home />} />
         <Route path="clients" element={<Clients />} />
         <Route path="maintenanceclients" element={<MaintenanceClient />} />
+        <Route path="maintenanceclients/:id" element={<MaintenanceClient />} />
         <Route path="*" element={<PrivateErrorPage />} />
       </Routes>
     </div>
